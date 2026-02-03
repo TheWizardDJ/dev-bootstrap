@@ -1,0 +1,20 @@
+{
+  "root": "C:\\Codex",
+  "workspace": "C:\\Codex\\popz-workspace",
+  "repos": [
+    {
+      "name": "HitSmartZBot",
+      "url": "https://github.com/TheWizardDJ/HitSmartZBot.git",
+      "post": [
+        { "type": "python_venv", "path": ".", "requirements": "requirements.txt" }
+      ]
+    },
+    {
+      "name": "popz-portal",
+      "url": "https://github.com/TheWizardDJ/popz-portal.git",
+      "post": [
+        { "type": "npm", "path": "backend", "command": "npm install" }
+      ]
+    }
+  ]
+}
