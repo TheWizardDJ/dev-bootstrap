@@ -4,7 +4,16 @@ $ErrorActionPreference = "Stop"
 
 function Write-Section($msg) { Write-Host "`n==== $msg ====" -ForegroundColor Cyan }
 function Have-Cmd($name) { return [bool](Get-Command $name -ErrorAction SilentlyContinue) }
-function Run($exe, $args) { & $exe @args; if ($LASTEXITCODE -ne 0) { throw "Failed: $exe $($args -join ' ')" } }
+function Run([string]$Exe, [string[]]$ArgList) {
+  if ($null -eq $ArgList -or $ArgList.Count -eq 0) {
+    throw "Refusing to run '$Exe' with no arguments (script bug)."
+  }
+
+  & $Exe @ArgList
+  if ($LASTEXITCODE -ne 0) {
+    throw "Failed: $Exe $($ArgList -join ' ')"
+  }
+}
 function Ensure-Folder($path) { if (!(Test-Path $path)) { New-Item -ItemType Directory -Path $path | Out-Null } }
 
 # Read manifest
