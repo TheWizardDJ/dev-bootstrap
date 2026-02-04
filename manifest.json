@@ -1,20 +1,23 @@
-{
-  "root": "C:\\Codex",
-  "workspace": "C:\\Codex\\popz-workspace",
-  "repos": [
-    {
-      "name": "HitSmartZBot",
-      "url": "https://github.com/TheWizardDJ/HitSmartZBot.git",
-      "post": [
-        { "type": "python_venv", "path": ".", "requirements": "requirements.txt" }
-      ]
-    },
-    {
-      "name": "popz-portal",
-      "url": "https://github.com/TheWizardDJ/popz-portal.git",
-      "post": [
-        { "type": "npm", "path": "backend", "command": "npm install" }
-      ]
-    }
-  ]
+﻿{
+    "root":  "C:\\Codex",
+    "workspace":  "C:\\Codex\\popz-workspace",
+    "repos":  [
+                  {
+                      "name":  "dev-bootstrap",
+                      "url":  "https://github.com/TheWizardDJ/dev-bootstrap.git",
+                      "path":  "C:\\\\Codex\\\\dev-bootstrap"
+                  },
+                  {
+                      "name":  "HitSmartZBot",
+                      "url":  "https://github.com/TheWizardDJ/HitSmartZBot.git"
+                  },
+                  {
+                      "name":  "popz-portal",
+                      "url":  "https://github.com/TheWizardDJ/popz-portal.git"
+                  },
+                  {
+                      "name":  "War_PayZ",
+                      "url":  "https://github.com/TheWizardDJ/War_PayZ.git"
+                  }
+              ]
 }
