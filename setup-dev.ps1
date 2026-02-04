@@ -36,8 +36,8 @@ if (!(Have-Cmd "winget")) {
 
 # Core dev tools
 & winget install --id Git.Git --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
-& winget install --id OpenJS.NodeJS.LTS --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
-& winget install --id Python.Python.3.11 --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
+& winget install --id OpenJS.NodeJS --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
+& winget install --id Python.Python.3.13 --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
 & winget install --id Microsoft.VisualStudioCode --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
 
 # SQLite (best-effort; ids vary by machine)
@@ -91,7 +91,7 @@ foreach ($r in $cfg.repos) {
           Push-Location $stepDir
           try {
             $venv = Join-Path $stepDir ".venv"
-            if (!(Test-Path $venv)) { Run "python" @("-m","venv",".venv") }
+            if (!(Test-Path $venv)) { Run "py" @("-m","venv",".venv") }
             $pip = Join-Path $venv "Scripts\pip.exe"
             & $pip install --upgrade pip setuptools wheel | Out-Host
             $req = Join-Path $stepDir $p.requirements
