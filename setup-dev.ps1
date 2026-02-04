@@ -2,6 +2,14 @@
 # Run in PowerShell (Admin recommended for winget installs).
 $ErrorActionPreference = "Stop"
 
+# Script location (dev-bootstrap directory)
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# Optional but smart: don't-drift reminder
+if ([IO.Path]::GetFullPath($here).TrimEnd('\') -ne "C:\Codex\dev-bootstrap") {
+  Write-Host "NOTE: dev-bootstrap is at $here (recommended: C:\Codex\dev-bootstrap)" -ForegroundColor Yellow
+}
+
 function Write-Section($msg) { Write-Host "`n==== $msg ====" -ForegroundColor Cyan }
 function Have-Cmd($name) { return [bool](Get-Command $name -ErrorAction SilentlyContinue) }
 function Run([string]$Exe, [string[]]$ArgList) {
@@ -17,7 +25,6 @@ function Run([string]$Exe, [string[]]$ArgList) {
 function Ensure-Folder($path) { if (!(Test-Path $path)) { New-Item -ItemType Directory -Path $path | Out-Null } }
 
 # Read manifest
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $manifestPath = Join-Path $here "manifest.json"
 if (!(Test-Path $manifestPath)) { throw "Missing manifest.json at $manifestPath" }
 $cfg = Get-Content $manifestPath -Raw | ConvertFrom-Json
@@ -69,6 +76,7 @@ foreach ($r in $cfg.repos) {
     } finally { Pop-Location }
   }
 
+
   # Post steps
   if ($r.post) {
     foreach ($p in $r.post) {
@@ -106,6 +114,61 @@ foreach ($r in $cfg.repos) {
   }
 }
 
+# ============================
+# Execution layer (bin + PATH)
+# ============================
+
+Write-Section "Ensure Codex bin directory"
+
+$bin = "C:\Codex\bin"
+if (!(Test-Path $bin)) {
+  New-Item -ItemType Directory -Path $bin | Out-Null
+  Write-Host "Created $bin"
+} else {
+  Write-Host "$bin already exists"
+}
+
+Write-Section "Install devstart / devend wrappers"
+
+$devBootstrap = $here
+
+$devstart = @"
+@echo off
+call "$devBootstrap\dev-sync-start.cmd"
+"@
+
+$devend = @"
+@echo off
+call "$devBootstrap\dev-sync-end.cmd"
+"@
+
+Set-Content -Path "$bin\devstart.cmd" -Value $devstart -Encoding ASCII
+Set-Content -Path "$bin\devend.cmd"   -Value $devend   -Encoding ASCII
+
+Write-Host "Installed devstart and devend wrappers"
+
+Write-Section "Ensure C:\Codex\bin is on PATH (user scope)"
+
+$target = "C:\Codex\bin"
+
+$current = [Environment]::GetEnvironmentVariable("Path", "User")
+$parts = @()
+if ($current) { $parts = $current -split ';' | Where-Object { $_ -ne "" } }
+
+
+if ($parts -notcontains $target) {
+  $newPath = ($parts + $target) -join ';'
+  [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+  Write-Host "Added $target to PATH (user)"
+  $env:Path = [Environment]::GetEnvironmentVariable("Path","Machine") + ";" + $newPath
+} else {
+  Write-Host "$target already on PATH"
+}
+
+Write-Section "Verify dev commands"
+where.exe devstart | Out-Host
+where.exe devend   | Out-Host
+
 Write-Section "Codex CLI (npm global)"
 # If your codex package name differs, change it here:
 & npm install -g codex | Out-Host
@@ -114,6 +177,6 @@ Write-Section "Verify"
 & git --version | Out-Host
 & node -v | Out-Host
 & npm -v | Out-Host
-& python --version | Out-Host
+& py --version | Out-Host
 
 Write-Host "`nDONE. Workspace: $Workspace" -ForegroundColor Green
