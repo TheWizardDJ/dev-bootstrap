@@ -43,7 +43,29 @@ if (!(Have-Cmd "winget")) {
 
 # Core dev tools
 & winget install --id Git.Git --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
-& winget install --id OpenJS.NodeJS --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
+
+# Pin Node to match desktop exactly
+$NodeVersion = "24.13.0"
+
+Write-Host "Ensuring Node.js v$NodeVersion..."
+try {
+  $currentNode = (& node -v 2>$null).Trim()
+} catch { $currentNode = $null }
+
+if ($currentNode -ne "v$NodeVersion") {
+  # If Node exists and is the wrong version, remove it first (MSI/winget won't downgrade in-place)
+  if ($currentNode) {
+    Write-Host "Node is $currentNode (expected v$NodeVersion). Uninstalling Node..."
+    & winget uninstall --id OpenJS.NodeJS --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
+  }
+
+  Write-Host "Installing Node.js v$NodeVersion..."
+  & winget install --id OpenJS.NodeJS --exact --version $NodeVersion --silent --accept-package-agreements --accept-source-agreements | Out-Host
+
+  # Refresh PATH in current session after install
+  $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+}
+
 & winget install --id Python.Python.3.13 --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
 & winget install --id Microsoft.VisualStudioCode --exact --silent --accept-package-agreements --accept-source-agreements | Out-Host
 
@@ -169,14 +191,30 @@ Write-Section "Verify dev commands"
 where.exe devstart | Out-Host
 where.exe devend   | Out-Host
 
-Write-Section "Codex CLI (npm global)"
-# If your codex package name differs, change it here:
-& npm install -g codex | Out-Host
+Write-Section "Codex CLI (npm global) — pinned"
+$CodexVersion = "0.98.0"
+
+# Remove the wrong/ancient package if it exists
+& npm uninstall -g codex 2>$null | Out-Host
+
+# Install the correct OpenAI Codex CLI
+& npm install -g @openai/codex@$CodexVersion | Out-Host
 
 Write-Section "Verify"
 & git --version | Out-Host
 & node -v | Out-Host
 & npm -v | Out-Host
 & py --version | Out-Host
+
+Write-Section "Verify pinned versions (fail fast)"
+
+$node = (& node -v).Trim()
+if ($node -ne "v24.13.0") { throw "Node mismatch: $node (expected v24.13.0)" }
+
+$npmv = (& npm -v).Trim()
+if ($npmv -ne "11.6.2") { throw "npm mismatch: $npmv (expected 11.6.2)" }
+
+$codexv = (& codex --version).Trim()
+if ($codexv -notmatch "0\.98\.0") { throw "Codex mismatch: $codexv (expected codex-cli 0.98.0)" }
 
 Write-Host "`nDONE. Workspace: $Workspace" -ForegroundColor Green
