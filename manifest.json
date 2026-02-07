@@ -7,9 +7,8 @@
                       "url":  "https://github.com/TheWizardDJ/dev-bootstrap.git"
                   },
                   {
-                      "name":  "dev-bootstrap",
-                      "url":  "https://github.com/TheWizardDJ/dev-bootstrap.git",
-                      "path":  "C:\\\\Codex\\\\dev-bootstrap"
+                      "name":  "DiscordEventEnrollBot",
+                      "url":  "https://github.com/TheWizardDJ/DiscordEventEnrollBot"
                   },
                   {
                       "name":  "HitSmartZBot",

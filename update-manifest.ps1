@@ -13,7 +13,9 @@ $exclude = '\\(\.git|node_modules|\.venv|dist|build|\.next|__pycache__)\\'
 function Get-RepoOriginUrl($repoPath) {
   Push-Location $repoPath
   try {
-    $url = (git remote get-url origin 2>$null).Trim()
+    $url = & git config --get remote.origin.url 2>$null
+    if ($LASTEXITCODE -ne 0) { return $null }
+    $url = $url.Trim()
     if ([string]::IsNullOrWhiteSpace($url)) { return $null }
     return $url
   } finally { Pop-Location }

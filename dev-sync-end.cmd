@@ -8,6 +8,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%BOOT%\update-manifest.ps1"
 
 REM 2) Commit/push manifest changes so other machine will clone new repos
 cd /d %BOOT%
+git fetch --all --prune
+git pull --ff-only
 for /f %%A in ('git status --porcelain') do set DIRTY=1
 if defined DIRTY (
   git add -A
