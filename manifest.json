@@ -4,11 +4,12 @@
     "repos":  [
                   {
                       "name":  "dev-bootstrap",
-                      "url":  "https://github.com/TheWizardDJ/dev-bootstrap.git"
+                      "url":  "https://github.com/TheWizardDJ/dev-bootstrap.git",
+                      "path":  "C:\\\\Codex\\\\dev-bootstrap"
                   },
                   {
                       "name":  "DiscordEventEnrollBot",
-                      "url":  "https://github.com/TheWizardDJ/DiscordEventEnrollBot"
+                      "url":  "https://github.com/TheWizardDJ/DiscordEventEnrollBot.git"
                   },
                   {
                       "name":  "HitSmartZBot",
