@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set BOOT=C:\Codex\popz-workspace\dev-bootstrap
+set BOOT=C:\\Codex\\dev-bootstrap
 set MAN=%BOOT%\manifest.json
 
 REM 1) Refresh manifest by auto-discovery

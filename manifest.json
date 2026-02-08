@@ -1,6 +1,6 @@
 ﻿{
-    "root":  "C:\\Codex",
-    "workspace":  "C:\\Codex\\popz-workspace",
+    "root":  "C:\\\\Codex",
+    "workspace":  "C:\\\\Codex\\\\popz-workspace",
     "repos":  [
                   {
                       "name":  "dev-bootstrap",
@@ -9,19 +9,23 @@
                   },
                   {
                       "name":  "DiscordEventEnrollBot",
-                      "url":  "https://github.com/TheWizardDJ/DiscordEventEnrollBot.git"
+                      "url":  "https://github.com/TheWizardDJ/DiscordEventEnrollBot.git",
+                      "path":  "C:\\\\Codex\\\\popz-workspace\\\\DiscordEventEnrollBot"
                   },
                   {
                       "name":  "HitSmartZBot",
-                      "url":  "https://github.com/TheWizardDJ/HitSmartZBot.git"
+                      "url":  "https://github.com/TheWizardDJ/HitSmartZBot.git",
+                      "path":  "C:\\\\Codex\\\\popz-workspace\\\\HitSmartZBot"
                   },
                   {
                       "name":  "popz-portal",
-                      "url":  "https://github.com/TheWizardDJ/popz-portal.git"
+                      "url":  "https://github.com/TheWizardDJ/popz-portal.git",
+                      "path":  "C:\\\\Codex\\\\popz-workspace\\\\popz-portal"
                   },
                   {
                       "name":  "War_PayZ",
-                      "url":  "https://github.com/TheWizardDJ/War_PayZ.git"
+                      "url":  "https://github.com/TheWizardDJ/War_PayZ.git",
+                      "path":  "C:\\\\Codex\\\\popz-workspace\\\\War_PayZ"
                   }
               ]
 }
